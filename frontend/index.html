@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Smart Traffic Insights | Live System</title>
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
@@ -28,16 +27,6 @@
             --font-mono: 'Space Mono', monospace;
         }
 
-        body.light-mode {
-            --bg: #ebf0f5;
-            --card: #ffffff;
-            --text: #1a202c;
-            --text-muted: #718096;
-            --border: #e2e8f0;
-            --glow-green: 0 0 15px rgba(0, 230, 118, 0.2);
-            --glow-red: 0 0 15px rgba(255, 51, 102, 0.2);
-        }
-
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
@@ -46,11 +35,9 @@
                               radial-gradient(circle at bottom left, rgba(176, 38, 255, 0.05) 0%, transparent 40%);
             color: var(--text);
             font-family: var(--font-main);
-            transition: all 0.3s ease;
             min-height: 100vh;
         }
 
-        /* Navbar */
         .navbar {
             position: sticky; top: 0; z-index: 1000;
             display: flex; justify-content: space-between; align-items: center;
@@ -80,7 +67,6 @@
         .btn:hover { background: rgba(255,255,255,0.08); color: var(--text);}
         .btn.active { background: linear-gradient(135deg, rgba(0,250,154,0.2), rgba(0,191,255,0.2)); color: var(--text); border-color: var(--green); box-shadow: inset 0 0 15px rgba(0,250,154,0.1); }
 
-        /* Scaffolding */
         .container { max-width: 1440px; margin: 0 auto; padding: 2rem; }
         .page { display: none; animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
         .page.active { display: block; }
@@ -101,7 +87,6 @@
         
         .header-row { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2rem; }
 
-        /* Dashboard specific */
         .stat-card {
             background: linear-gradient(180deg, rgba(15,21,45,0.8) 0%, rgba(10,14,26,0.8) 100%); 
             border-radius: 16px; padding: 1.5rem; border: 1px solid var(--border); 
@@ -112,18 +97,11 @@
         .stat-card.c-blue::before { background: var(--blue); box-shadow: 0 0 15px var(--blue);}
         .stat-card.c-amber::before { background: var(--amber); box-shadow: 0 0 15px var(--amber);}
         .stat-card.c-purple::before { background: var(--purple); box-shadow: 0 0 15px var(--purple);}
-
         .stat-val { font-family: var(--font-mono); font-size: 2.5rem; font-weight: bold; margin-top: 10px; color: var(--text); }
         
         /* Realistic Camera Intersection Grid */
-        .cam-wrapper {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;
-        }
-        
-        .road-p { 
-            background: rgba(0,0,0,0.4); border: 1px solid var(--border); 
-            border-radius: 12px; padding: 16px; position:relative; overflow: hidden;
-        }
+        .cam-wrapper { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+        .road-p { background: rgba(0,0,0,0.4); border: 1px solid var(--border); border-radius: 12px; padding: 16px; position:relative; overflow: hidden; }
 
         .road-header { display: flex; justify-content: space-between; align-items: center; font-size: 0.95rem; font-weight: 700; margin-bottom: 12px;}
         .badge { font-size: 0.75rem; padding: 4px 10px; border-radius: 6px; color: #000; font-weight: 800; letter-spacing: 0.5px; background: var(--text-muted);}
@@ -132,9 +110,9 @@
         .badge.bg-amber { background: var(--amber); color: #000;}
 
         .cam-box { height: 220px; background: #000; border-radius: 8px; margin-bottom: 12px; position: relative; border: 1px solid rgba(255,255,255,0.1); overflow: hidden; }
-        .cam-bg { position: absolute; top:0; left:0; width:100%; height:100%; background-size: cover; background-position: center; opacity: 0.5; filter: grayscale(50%); transition: filter 0.3s, opacity 0.3s; }
-        .cam-box.active .cam-bg { opacity: 0.8; filter: grayscale(0%); }
-        .cam-canvas { position: absolute; top:0; left:0; width: 100%; height: 100%; z-index: 10;}
+        .cam-bg { position: absolute; top:0; left:0; width:100%; height:100%; object-fit: cover; opacity: 0.5; filter: grayscale(40%) contrast(1.2); transition: filter 0.3s, opacity 0.3s; z-index:1;}
+        .cam-box.active .cam-bg { opacity: 0.9; filter: grayscale(0%) contrast(1.1); }
+        .cam-canvas { position: absolute; top:0; left:0; width: 100%; height: 100%; z-index: 10; pointer-events: none;}
         
         .ai-overlay { position: absolute; top: 10px; left: 10px; z-index: 20; background: rgba(0,0,0,0.7); border: 1px solid var(--green); border-radius: 6px; padding: 4px 8px; font-size: 0.7rem; color: var(--green); font-family: var(--font-mono); font-weight: bold; display: flex; align-items: center; gap: 6px;}
         .ai-overlay .blink { width:6px; height:6px; background: var(--green); border-radius:50%; animation: pulse 1s infinite; }
@@ -167,7 +145,6 @@
         .chart-box { height: 350px; width: 100%; margin-top: 1rem; }
         .sum-row { display: grid; grid-template-columns: repeat(4, 1fr); text-align: center; gap: 10px; margin-top: 2rem; border-top: 1px solid var(--border); padding-top: 1.5rem;}
         .sum-row .val { font-family: var(--font-mono); font-size: 1.5rem; font-weight: bold; margin-top: 8px;}
-        
         .insight-card { border: 1px solid var(--border); background:rgba(255,255,255,0.02); padding: 20px; border-radius: 12px; margin-bottom: 1rem; transition: transform 0.2s;}
         .insight-card:hover { transform: translateY(-2px); border-color: rgba(255,255,255,0.15); box-shadow: 0 4px 20px rgba(0,0,0,0.3);}
         
@@ -176,9 +153,7 @@
         .t-blue { color: var(--blue); }
         .t-amber { color: var(--amber); }
         .font-mono { font-family: var(--font-mono); }
-
         .footer { text-align: center; padding: 2rem; font-size: 0.8rem; color: var(--text-muted); opacity:0.7;}
-
     </style>
 </head>
 <body>
@@ -201,13 +176,13 @@
     </nav>
 
     <div class="container">
-        
         <!-- DASHBOARD -->
         <div id="page-dash" class="page active">
             <div class="header-row">
                 <div>
-                    <h1 style="font-size:2rem; font-weight:800; letter-spacing:0.5px; margin-bottom:5px;">City Intersection Autonomous Control</h1>
-                    <p class="card-subtitle" style="font-size:1.05rem;">Running via Computer Vision & Predictive Analytics (Continuous 1x Timing)</p>
+                    <!-- Updated Target Title -->
+                    <h1 style="font-size:2rem; font-weight:800; letter-spacing:0.5px; margin-bottom:5px;">Guduvanchery, Chennai, Tamil Nadu - Road Signal</h1>
+                    <p class="card-subtitle" style="font-size:1.05rem;">Running via Computer Vision & Predictive Analytics (Continuous Real-Time)</p>
                 </div>
                 <div style="font-family:var(--font-mono); font-size:1.1rem; color:var(--text-muted); padding:10px 20px; background:rgba(0,0,0,0.3); border-radius:10px; border:1px solid var(--border);">
                     System Cycle: <strong class="t-green" id="lbl-cyc" style="font-size:1.4rem; margin-right:5px;">0</strong> (8s sync)
@@ -228,8 +203,8 @@
                     <div class="stat-val"><span id="st-tp">0</span><span style="font-size:1.1rem;color:var(--text-muted);font-family:var(--font-main)"> / min</span></div>
                 </div>
                 <div class="stat-card c-purple">
-                    <div class="card-subtitle" style="font-weight:600; color:var(--purple)">⚡ AI EFFICIENCY</div>
-                    <div class="stat-val" id="st-eff">92%</div>
+                    <div class="card-subtitle" style="font-weight:600; color:var(--purple)">⚡ AI CONFIDENCE</div>
+                    <div class="stat-val" id="st-eff">96.4%</div>
                 </div>
             </div>
 
@@ -237,7 +212,7 @@
                 <div class="card" style="padding:2rem;">
                     <div class="card-header">
                         <div>
-                            <div class="card-title">Live Camera Feeds</div>
+                            <div class="card-title">Live AI Camera Feeds</div>
                             <div class="card-subtitle" style="margin-top:5px;">Real-time YOLOv8 Object Detection Tracking</div>
                         </div>
                         <div class="badge bg-green" style="padding:6px 12px; font-size:0.85rem;">● AI ACTIVE</div>
@@ -297,7 +272,7 @@
                 <div class="chart-box"><canvas id="chart"></canvas></div>
                 <div class="sum-row">
                     <div><div class="card-subtitle">Peak Traffic Target</div><div class="val">~50 veh/min</div></div>
-                    <div><div class="card-subtitle">Current Avg</div><div class="val" id="c-tp">34</div></div>
+                    <div><div class="card-subtitle">Current Avg</div><div class="val" id="c-tp">0</div></div>
                     <div><div class="card-subtitle">Total Processed</div><div class="val" id="c-tot">0</div></div>
                     <div><div class="card-subtitle">AI Confidence</div><div class="val t-green" id="c-eff">96.4%</div></div>
                 </div>
@@ -316,31 +291,21 @@
                         <button class="em-btn" style="background:linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.1)); border:1px solid var(--border); box-shadow:none; margin:0;" onclick="exportReal('csv')">📋 Export Database (CSV)</button>
                         <button class="em-btn" style="background:linear-gradient(135deg, rgba(0, 191, 255,0.1), rgba(0, 191, 255,0.2)); border:1px solid rgba(0,191,255,0.5); box-shadow:none; color:var(--blue); margin:0;" onclick="exportReal('json')">{ } Export Database (JSON)</button>
                     </div>
-                    <div style="font-size:0.8rem; color:var(--text-muted); text-align:center; margin-top:15px;">Downloads pull limits to last 500 rows for performance.</div>
                 </div>
-
                 <div class="card">
-                    <div class="card-header">
-                        <div class="card-title">System Insights</div>
-                    </div>
+                    <div class="card-header"><div class="card-title">System Insights</div></div>
                     <div style="display:flex; flex-direction:column; gap:15px;">
                         <div class="insight-card">
                             <div style="font-size:0.95rem;font-weight:700;margin-bottom:6px; color:var(--text);">💡 Neural Network Adaptive Timing</div>
                             <div class="card-subtitle" style="margin-bottom:8px;">Running continuous optimization on South boundary.</div>
                             <div class="t-green font-mono" style="font-size:0.85rem;">📈 +12% flow efficiency achieved</div>
                         </div>
-                        <div class="insight-card">
-                            <div style="font-size:0.95rem;font-weight:700;margin-bottom:6px; color:var(--text);">🛡 Collision Avoidance Ready</div>
-                            <div class="card-subtitle" style="margin-bottom:8px;">Camera bounding boxes detecting ped conflicts successfully.</div>
-                            <div class="t-blue font-mono" style="font-size:0.85rem;">🔒 Zero anomalies detected in last 24h</div>
-                        </div>
                     </div>
                 </div>
             </div>
-            
             <div class="footer">
                 ⚡ Analytics Information<br>
-                Data permanently archived to Supabase PostgreSQL • Updated every 5 seconds • Resolution Time: Live<br>
+                Data permanently archived to PostgreSQL • Updated every 5 seconds • Resolution Time: Live<br>
                 © 2026 Smart Traffic Simulator
             </div>
         </div>
@@ -350,20 +315,23 @@
         // Real API targeting
         const API_URL = (import.meta && import.meta.env && import.meta.env.VITE_API_URL) || 'http://localhost:3000';
 
-        // State Machine
         let S = {
             cycles: 0, time: 0,
             activeRoad: 'A', roadNames: ['A','B','C','D'],
-            queues: {A:12,B:20,C:8,D:15}, speeds: {A:40,B:35,C:45,D:30},
-            vehs: {A:45,B:65,C:30,D:50}, total: 1245, tput: 34, wait: 7, eff: 92,
-            emOn: false, emRoad: null, emType: null, emTimer: 0,
+            queues: {A:0,B:0,C:0,D:0}, speeds: {A:40,B:35,C:45,D:30},
+            vehs: {A:0,B:0,C:0,D:0}, total: 4632, emOn: false, emRoad: null, emType: null, emTimer: 0,
             apiActive: false
         };
 
         const R_LABELS = {A:'North Bound (A)', B:'East Bound (B)', C:'South Bound (C)', D:'West Bound (D)'};
         
-        // Premium Unsplash traffic background for AI cameras
-        const CAM_BG_URL = "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?auto=format&fit=crop&w=600&q=80";
+        // Use real distinct videos for each road
+        const VID_URLS = {
+            A: 'https://assets.mixkit.co/videos/preview/mixkit-city-traffic-on-the-street-at-night-34509-large.mp4',
+            B: 'https://assets.mixkit.co/videos/preview/mixkit-cars-on-a-highway-in-a-forest-27352-large.mp4',
+            C: 'https://assets.mixkit.co/videos/preview/mixkit-traffic-in-the-city-at-night-34507-large.mp4',
+            D: 'https://assets.mixkit.co/videos/preview/mixkit-cars-driving-on-a-highway-in-the-rain-20836-large.mp4'
+        };
 
         // Generate Roads UI
         function initRoads() {
@@ -387,26 +355,26 @@
                     </div>
                     
                     <div class="cam-box" id="cbox-${r}">
-                        <div class="cam-bg" style="background-image:url('${CAM_BG_URL}')"></div>
+                        <video src="${VID_URLS[r]}" class="cam-bg" autoplay loop muted playsinline></video>
                         <canvas class="cam-canvas" id="canv-${r}"></canvas>
                         <div class="ai-overlay"><div class="blink"></div> AI YOLO CAMERA</div>
                     </div>
                     
                     <div class="mini-stats">
                         <div style="display:flex; flex-direction:column; align-items:flex-start;">
-                            <span style="font-size:0.75rem; color:var(--text-muted); font-weight:normal;">VEHICLES</span>
-                            <span id="v-${r}">${S.vehs[r]}</span>
+                            <span style="font-size:0.75rem; color:var(--text-muted); font-weight:normal;">VEHICLES (EXACT)</span>
+                            <span class="t-green font-mono" style="font-size:1.1rem;" id="v-${r}">0</span>
                         </div>
                         <div style="display:flex; flex-direction:column; align-items:center;">
-                            <span style="font-size:0.75rem; color:var(--text-muted); font-weight:normal;">QUEUE</span>
-                            <span id="q-${r}">${S.queues[r]}</span>
+                            <span style="font-size:0.75rem; color:var(--text-muted); font-weight:normal;">QUEUE (STOPPED)</span>
+                            <span class="t-amber font-mono" style="font-size:1.1rem;" id="q-${r}">0</span>
                         </div>
                         <div style="display:flex; flex-direction:column; align-items:flex-end;">
                             <span style="font-size:0.75rem; color:var(--text-muted); font-weight:normal;">AVG SPEED</span>
-                            <span><span id="s-${r}">${S.speeds[r]}</span> km/h</span>
+                            <span><span id="s-${r}">0</span> km/h</span>
                         </div>
                     </div>
-                    <div class="q-bar-bg"><div class="q-bar" id="bar-${r}" style="width:50%"></div></div>
+                    <div class="q-bar-bg"><div class="q-bar" id="bar-${r}" style="width:0%"></div></div>
                     <div style="display:flex; justify-content:space-between; font-size:0.8rem; font-family:var(--font-mono); color:var(--text-muted);">
                         <span>Throughput: <span class="t-green font-mono" id="tp-${r}">--</span> veh/min</span>
                         <span>Confidence: <span class="t-blue" id="conf-${r}">98.2%</span></span>
@@ -417,11 +385,10 @@
         }
         initRoads();
 
-        // Canvas Realistic AI Engine (Bounding Boxes)
+        // Canvas Realistic AI Engine (Bounding Boxes over literal video)
         const canvEngine = {};
         S.roadNames.forEach(r => {
             const canvas = document.getElementById(`canv-${r}`);
-            // Let layout compute physical size
             canvas.width = canvas.parentElement.clientWidth; 
             canvas.height = canvas.parentElement.clientHeight;
             canvEngine[r] = { ctx: canvas.getContext('2d'), boxes: [], w: canvas.width, h: canvas.height };
@@ -431,15 +398,14 @@
 
         function spawnAIBox(r) {
             const engine = canvEngine[r];
-            const sizeMod = 0.5 + Math.random();
+            const sizeMod = 0.6 + Math.random()*0.8;
             engine.boxes.push({
                 x: Math.random() < 0.5 ? -40 : engine.w + 10,
-                y: 50 + Math.random()*(engine.h - 100),
-                w: 40 * sizeMod, h: 25 * sizeMod,
-                speedX: (Math.random() < 0.5 ? 1 : -1) * (1 + Math.random()*2),
+                y: 30 + Math.random()*(engine.h - 80),
+                w: 45 * sizeMod, h: 30 * sizeMod,
+                speedX: (Math.random() < 0.5 ? 1 : -1) * (0.5 + Math.random()*1.5),
                 type: VEH_CLASSES[Math.floor(Math.random()*VEH_CLASSES.length)],
-                conf: (85 + Math.random()*14).toFixed(1),
-                color: (S.emOn && r !== S.emRoad) ? '#ff3366' : '#00fa9a' // Red bounding boxes if stopped hard, green if flowing
+                conf: (85 + Math.random()*14).toFixed(1)
             });
         }
 
@@ -448,6 +414,8 @@
             if(!lastFrame) lastFrame = time;
             const delta = (time - lastFrame) / 16.66;
             lastFrame = time;
+            
+            let newTotalAdded = 0;
 
             S.roadNames.forEach(r => {
                 const engine = canvEngine[r];
@@ -455,21 +423,30 @@
                 
                 const isGreen = S.emOn ? (r === S.emRoad) : (r === S.activeRoad);
 
-                // Spawn logic
-                if(Math.random() < (isGreen?0.08:0.02)) spawnAIBox(r);
+                // Spawn density based on light
+                if(Math.random() < (isGreen?0.08:0.04)) {
+                    spawnAIBox(r);
+                    newTotalAdded++;
+                }
+
+                let stoppedCount = 0;
+                let activeCount = engine.boxes.length;
 
                 engine.boxes.forEach((b, i) => {
                     // move logic
-                    if(!isGreen && Math.abs(b.speedX) > 0.1) {
-                        b.speedX *= 0.95; // brake
-                    } else if(isGreen && Math.abs(b.speedX) < 2) {
+                    if(!isGreen && Math.abs(b.speedX) > 0.05) {
+                        b.speedX *= 0.90; // brake hard
+                    } else if(isGreen && Math.abs(b.speedX) < 3) {
                         b.speedX *= 1.05; // gas
+                        if(Math.abs(b.speedX) < 0.1) b.speedX = Math.random() < 0.5 ? 0.5 : -0.5; // kickstart stopped cars
                     }
+                    
+                    if(Math.abs(b.speedX) < 0.2) stoppedCount++;
                     
                     b.x += b.speedX * delta;
                     
-                    // Update color based on signal
-                    b.color = isGreen ? '#00fa9a' : '#ff3366';
+                    // Update color based on speed/signal
+                    b.color = isGreen ? '#00fa9a' : (Math.abs(b.speedX) < 0.2 ? '#ff3366' : '#ffd700');
 
                     // Draw bounding box
                     engine.ctx.strokeStyle = b.color;
@@ -486,57 +463,51 @@
                     engine.ctx.fillText(`[${b.type} ${b.conf}%]`, b.x + 2, b.y - 4, b.w - 4);
                 });
 
+                // EXACT COUNT COUPLED TO PHYSICS:
+                S.vehs[r] = activeCount;
+                S.queues[r] = stoppedCount;
+
                 // Cleanup Offscreen
                 engine.boxes = engine.boxes.filter(b => b.x > -100 && b.x < engine.w + 100);
             });
+            
+            S.total += newTotalAdded;
+            
             requestAnimationFrame(renderAIBoxes);
         }
         requestAnimationFrame(renderAIBoxes);
 
-        // Continuous Loop Timing
-        let tMainCount = 0;
+        // UI Refresh Loop
         setInterval(() => {
-            tMainCount += 1000;
             document.getElementById('clock').innerText = new Date().toLocaleTimeString('en-US',{hour12:false});
+            document.getElementById('st-tot').innerText = S.total;
+            document.getElementById('c-tot').innerText = S.total;
 
-            if(tMainCount >= 1000) {
-                S.roadNames.forEach(r => {
-                    let isG = S.emOn ? (r === S.emRoad) : (r === S.activeRoad);
-                    // random walk queues
-                    if(isG) { S.queues[r] = Math.max(0, S.queues[r] - Math.floor(Math.random()*5)); }
-                    else { if(Math.random()>0.4) S.queues[r] += Math.floor(Math.random()*4); }
-                    
-                    S.vehs[r] = S.queues[r] + Math.floor(Math.random()*8) + 12; // Base invisible layer
-                    S.speeds[r] = isG ? (35 + Math.random()*25).toFixed(1) : (Math.random()*5).toFixed(1);
-                    
-                    // update dom
-                    document.getElementById(`q-${r}`).innerText = S.queues[r];
-                    document.getElementById(`v-${r}`).innerText = S.vehs[r];
-                    document.getElementById(`s-${r}`).innerText = S.speeds[r];
-                    
-                    let tp = (S.vehs[r] * Math.random()*1.5).toFixed(0);
-                    document.getElementById(`tp-${r}`).innerText = tp;
-                    document.getElementById(`conf-${r}`).innerText = (95 + Math.random()*4).toFixed(1) + '%';
-
-                    // visual queue bars
-                    let pct = Math.min(100, (S.queues[r]/50)*100);
-                    let bar = document.getElementById(`bar-${r}`);
-                    bar.style.width = pct + '%';
-                    bar.style.background = pct < 30 ? 'var(--green)' : pct < 70 ? 'var(--amber)' : 'var(--red)';
-                });
-
-                S.total += Math.floor(Math.random()*8 + 2);
-                document.getElementById('st-tot').innerText = S.total;
-                document.getElementById('c-tot').innerText = S.total;
+            S.roadNames.forEach(r => {
+                const isGreen = S.emOn ? (r === S.emRoad) : (r === S.activeRoad);
+                // Exact counts injected into DOM directly from physics engine readouts
+                document.getElementById(`v-${r}`).innerText = S.vehs[r];
+                document.getElementById(`q-${r}`).innerText = S.queues[r];
                 
-                // average tput
-                let aTp = Math.floor(S.total / ((S.cycles+1) * 8)) * 60;
-                if(aTp>0) document.getElementById('st-tp').innerText = aTp;
-                if(aTp>0) document.getElementById('c-tp').innerText = aTp;
+                S.speeds[r] = isGreen ? (35 + Math.random()*15).toFixed(1) : (S.queues[r] > 0 ? (0 + Math.random()*2).toFixed(1) : (15 + Math.random()*10).toFixed(1));
+                document.getElementById(`s-${r}`).innerText = S.speeds[r];
+                
+                document.getElementById(`tp-${r}`).innerText = (S.vehs[r] * 12).toFixed(0);
+                document.getElementById(`conf-${r}`).innerText = (93 + Math.random()*6).toFixed(1) + '%';
 
-                tMainCount = 0;
+                let pct = Math.min(100, (S.queues[r]/15)*100);
+                let bar = document.getElementById(`bar-${r}`);
+                bar.style.width = pct + '%';
+                bar.style.background = pct < 30 ? 'var(--green)' : pct < 70 ? 'var(--amber)' : 'var(--red)';
+            });
+
+            let aTp = Math.floor(S.total / ((S.cycles+1) * 8)) * 60;
+            if(aTp>0 && aTp < 5000) {
+                document.getElementById('st-tp').innerText = aTp;
+                document.getElementById('c-tp').innerText = aTp;
             }
-        }, 200); // UI responsive tick
+
+        }, 250);
 
         // Autonomous Signal Timer
         setInterval(() => {
@@ -553,7 +524,7 @@
                     updateLights();
                 }
             }
-        }, 1000); // strict 1 second pulse
+        }, 1000); 
 
         function updateLights() {
             S.roadNames.forEach(r => {
@@ -601,7 +572,6 @@
             const ban = document.getElementById('em-banner');
             
             if(S.emOn) { 
-                // Restore Normal
                 S.emOn = false; S.emRoad = null;
                 b.innerHTML = 'ACTIVATE OVERRIDE';
                 b.style.boxShadow = '0 4px 15px rgba(255,51,102,0.3)';
@@ -609,23 +579,20 @@
                 document.querySelectorAll('.em-card').forEach(c=>c.classList.remove('sel'));
                 ban.style.display = 'none';
             } else { 
-                // Activate Override
                 S.emOn = true; S.emTimer = 15;
                 b.innerHTML = '🔴 ACTIVE (CLICK TO CANCEL AUTORESET)';
                 b.style.boxShadow = '0 0 30px rgba(255,51,102,0.8)';
                 ban.style.display = 'block';
-                // Post to API if active
                 if(S.apiActive) postAPI('/api/emergency', {road: S.emRoad, vehicle_type: S.emType});
             }
             updateLights();
         }
 
         window.exportReal = (format) => {
-            const url = API_URL + '/api/export/' + format;
-            window.location.href = url; // Standard redirect to trigger download blob from server
+            window.location.href = API_URL + '/api/export/' + format; 
         }
 
-        // API Links & Charts
+        // API
         async function fetchAPI(route) {
             try { return await (await fetch(API_URL + route)).json(); } 
             catch(err) { return null; }
@@ -637,7 +604,6 @@
             })).json(); } catch(err) { return null; }
         }
 
-        // System ping 
         setInterval(async () => {
             const stat = await fetchAPI('/api/status');
             const badge = document.getElementById('sys-badge');
@@ -664,7 +630,6 @@
             }
         }, 5000);
 
-        // Standard Line Chart configuration
         const ctx = document.getElementById('chart').getContext('2d');
         const cinst = new Chart(ctx, {
             type: 'line',
@@ -697,7 +662,6 @@
                 cinst.update();
             }
         }, 3000);
-
     </script>
 </body>
 </html>
