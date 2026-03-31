@@ -200,7 +200,7 @@ app.get('/api/export/csv', async (req, res) => {
         
         let csv = 'id,road,vehicles,queue,speed,throughput,signal_state,created_at\\n';
         result.rows.forEach(r => {
-            csv += \`\${r.id},\${r.road},\${r.vehicles},\${r.queue},\${r.speed},\${r.throughput},\${r.signal_state},\${r.created_at}\\n\`;
+            csv += `${r.id},${r.road},${r.vehicles},${r.queue},${r.speed},${r.throughput},${r.signal_state},${r.created_at}\\n`;
         });
         res.send(csv);
     } catch(err) {
@@ -209,5 +209,5 @@ app.get('/api/export/csv', async (req, res) => {
 });
 
 app.listen(PORT, () => {
-    console.log(\`Server running on port \${PORT}\`);
+    console.log(`Server running on port ${PORT}`);
 });
