@@ -8,28 +8,28 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Roboto+Mono:wght@400;700&display=swap"
         rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.1/jspdf.plugin.autotable.min.js"></script>
     <style>
         :root {
-            --bg: #070913;
-            --card: #0f152d;
-            --green: #00fa9a;
-            --blue: #00bfff;
-            --amber: #ffd700;
-            --red: #ff3366;
-            --cyan: #00ffff;
-            --purple: #b026ff;
-            --text: #f0f4f8;
-            --text-muted: #8b9dc3;
-            --border: rgba(255, 255, 255, 0.08);
-            --glow-green: 0 0 20px rgba(0, 250, 154, 0.4);
-            --glow-red: 0 0 20px rgba(255, 51, 102, 0.4);
-            --font-main: 'Outfit', sans-serif;
-            --font-mono: 'Space Mono', monospace;
+            --bg: #f4f6f8;
+            --card: #ffffff;
+            --green: #138808; /* Indian Flag Green */
+            --blue: #000080;  /* Official Navy */
+            --amber: #FF9933; /* Indian Saffron */
+            --red: #D32F2F;
+            --cyan: #0288D1;
+            --purple: #4A148C;
+            --text: #1a1e29;
+            --text-muted: #64748b;
+            --border: #cbd5e1;
+            --glow-green: none;
+            --glow-red: none;
+            --font-main: 'Inter', sans-serif;
+            --font-mono: 'Roboto Mono', monospace;
         }
 
         * {
@@ -40,8 +40,6 @@
 
         body {
             background-color: var(--bg);
-            background-image: radial-gradient(circle at top right, rgba(0, 191, 255, 0.05) 0%, transparent 40%),
-                radial-gradient(circle at bottom left, rgba(176, 38, 255, 0.05) 0%, transparent 40%);
             color: var(--text);
             font-family: var(--font-main);
             min-height: 100vh;
@@ -54,43 +52,31 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1rem 2rem;
-            background: rgba(15, 21, 45, 0.85);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--border);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+            padding: 0.5rem 2rem;
+            background: #ffffff;
+            border-bottom: 4px solid var(--amber); /* Saffron Header Strip */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
         }
 
         .nav-logo {
-            font-size: 1.3rem;
+            font-size: 1.1rem;
             font-weight: 800;
-            color: var(--text);
+            color: var(--blue);
             display: flex;
             align-items: center;
-            gap: 10px;
-            letter-spacing: 0.5px;
-        }
-
-        .nav-logo .icon {
-            width: 18px;
-            height: 18px;
-            background: linear-gradient(135deg, var(--green), #00c853);
-            border-radius: 4px;
-            box-shadow: var(--glow-green);
+            gap: 12px;
+            letter-spacing: 0.2px;
         }
 
         .nav-logo-sub {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: var(--text-muted);
             font-weight: 500;
-            margin-left: 10px;
-            padding-left: 10px;
-            border-left: 1px solid var(--border);
         }
 
         .nav-center {
             display: flex;
-            gap: 10px;
+            gap: 8px;
         }
 
         .nav-right {
@@ -159,11 +145,11 @@
         }
 
         .btn {
-            background: transparent;
+            background: #f1f5f9;
             border: 1px solid var(--border);
             color: var(--text-muted);
             padding: 8px 18px;
-            border-radius: 8px;
+            border-radius: 6px;
             font-family: var(--font-main);
             font-weight: 600;
             cursor: pointer;
@@ -171,15 +157,15 @@
         }
 
         .btn:hover {
-            background: rgba(255, 255, 255, 0.08);
+            background: #e2e8f0;
             color: var(--text);
         }
 
         .btn.active {
-            background: linear-gradient(135deg, rgba(0, 250, 154, 0.2), rgba(0, 191, 255, 0.2));
-            color: var(--text);
-            border-color: var(--green);
-            box-shadow: inset 0 0 15px rgba(0, 250, 154, 0.1);
+            background: var(--blue);
+            color: white;
+            border-color: var(--blue);
+            box-shadow: none;
         }
 
         .container {
@@ -210,12 +196,11 @@
         }
 
         .card {
-            background: rgba(15, 21, 45, 0.6);
-            backdrop-filter: blur(10px);
-            border-radius: 16px;
+            background: var(--card);
+            border-radius: 8px;
             padding: 1.5rem;
             border: 1px solid var(--border);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
             margin-bottom: 1.5rem;
         }
 
@@ -265,12 +250,13 @@
         }
 
         .stat-card {
-            background: linear-gradient(180deg, rgba(15, 21, 45, 0.8) 0%, rgba(10, 14, 26, 0.8) 100%);
-            border-radius: 16px;
+            background: var(--card);
+            border-radius: 8px;
             padding: 1.5rem;
             border: 1px solid var(--border);
             position: relative;
             overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
 
         .stat-card::before {
@@ -280,28 +266,12 @@
             left: 0;
             right: 0;
             height: 4px;
-            opacity: 0.8;
         }
 
-        .stat-card.c-green::before {
-            background: var(--green);
-            box-shadow: var(--glow-green);
-        }
-
-        .stat-card.c-blue::before {
-            background: var(--blue);
-            box-shadow: 0 0 15px var(--blue);
-        }
-
-        .stat-card.c-amber::before {
-            background: var(--amber);
-            box-shadow: 0 0 15px var(--amber);
-        }
-
-        .stat-card.c-purple::before {
-            background: var(--purple);
-            box-shadow: 0 0 15px var(--purple);
-        }
+        .stat-card.c-green::before { background: var(--green); }
+        .stat-card.c-blue::before { background: var(--blue); }
+        .stat-card.c-amber::before { background: var(--amber); }
+        .stat-card.c-purple::before { background: var(--purple); }
 
         .stat-val {
             font-family: var(--font-mono);
@@ -660,17 +630,17 @@
         }
 
         /* Auth Wrapper */
-        #login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #070913; z-index: 99999; display: flex; align-items: center; justify-content: center; transition: opacity 0.5s; flex-direction:column; }
-        .login-box { background: rgba(15, 21, 45, 0.8); backdrop-filter: blur(20px); border: 1px solid var(--border); padding: 3rem; border-radius: 16px; width: 400px; text-align: center; box-shadow: 0 10px 50px rgba(0,0,0,0.5); }
-        .login-inp { width: 100%; padding: 12px; margin: 20px 0; background: rgba(0,0,0,0.5); border: 1px solid var(--border); color: white; border-radius: 8px; font-family: var(--font-mono); font-size: 1.1rem; text-align:center; }
-        .login-inp:focus { outline:none; border-color: var(--green); box-shadow: var(--glow-green); }
-        .btn-login { width: 100%; padding: 14px; background: linear-gradient(135deg, #00fa9a, #00bfff); color: #000; border: none; font-weight: 800; border-radius: 8px; font-size: 1.1rem; cursor: pointer; transition: 0.3s; }
-        .btn-login:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(0,250,154,0.4); }
+        #login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #eef2f6; z-index: 99999; display: flex; align-items: center; justify-content: center; transition: opacity 0.5s; flex-direction:column; }
+        .login-box { background: #ffffff; border: 1px solid var(--border); padding: 3rem; border-radius: 8px; width: 450px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border-top: 6px solid var(--amber); }
+        .login-inp { width: 100%; padding: 12px; margin: 20px 0; background: #f8fafc; border: 1px solid var(--border); color: var(--text); border-radius: 4px; font-family: var(--font-mono); font-size: 1.1rem; text-align:center; }
+        .login-inp:focus { outline:none; border-color: var(--blue); box-shadow: 0 0 0 3px rgba(0,0,128,0.1); }
+        .btn-login { width: 100%; padding: 14px; background: var(--blue); color: #fff; border: none; font-weight: 700; border-radius: 4px; font-size: 1.1rem; cursor: pointer; transition: 0.3s; }
+        .btn-login:hover { background: #00004d; }
 
         /* Chennai Select */
-        .loc-select { background: rgba(255,255,255,0.05); color: white; border: 1px solid var(--border); padding: 4px 10px; border-radius: 8px; font-family: var(--font-main); font-weight: 600; font-size: 0.95rem; cursor: pointer; outline:none; }
-        .loc-select:hover { background: rgba(0, 191, 255, 0.1); border-color: var(--blue); }
-        .loc-select option { background: var(--bg); color: white; }
+        .loc-select { background: #f1f5f9; color: var(--text); border: 1px solid var(--border); padding: 6px 12px; border-radius: 6px; font-family: var(--font-main); font-weight: 600; font-size: 0.95rem; cursor: pointer; outline:none; }
+        .loc-select:hover { border-color: var(--blue); }
+        .loc-select option { background: var(--card); color: var(--text); }
     </style>
 </head>
 
@@ -678,30 +648,39 @@
     <!-- Secure Government Auth Wrapper -->
     <div id="login-overlay">
         <div class="login-box">
-            <div class="icon" style="width:40px; height:40px; background:linear-gradient(135deg, var(--green), #00c853); border-radius:8px; box-shadow:var(--glow-green); margin:0 auto 20px;"></div>
-            <h2 style="font-size:1.5rem; margin-bottom:5px;">Department of Transport</h2>
-            <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:10px;">Intelligent Node Security Gateway</p>
-            <input type="password" id="pass-inp" class="login-inp" placeholder="Enter Override Passcode" onkeypress="if(event.key==='Enter') login()">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/55/Emblem_of_India.svg" style="height:55px; margin-bottom:15px;" alt="India Emblem">
+            <h2 style="font-size:1.4rem; color:var(--blue); margin-bottom:5px;">National Informatics Centre</h2>
+            <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:15px;">Target Node MVD Authentication</p>
+            <input type="password" id="pass-inp" class="login-inp" placeholder="Enter Secure NIC Passcode" onkeypress="if(event.key==='Enter') login()">
             <div id="login-err" style="color:var(--red); font-size:0.85rem; margin-bottom:15px; display:none;">Access Denied. Passcode Incorrect.</div>
-            <button class="btn-login" onclick="login()">AUTHORIZE ACCESS</button>
+            <button class="btn-login" onclick="login()">AUTHORIZE SECURE ACCESS</button>
         </div>
-        <div style="margin-top:30px; color:var(--text-muted); font-family:var(--font-mono); font-size:0.8rem; letter-spacing:1px; text-align:center;">RESTRICTED GOVERNMENT PORTAL<br>UNAUTHORIZED ACCESS STRICTLY LOGGED</div>
+        <div style="margin-top:25px; color:var(--text-muted); font-size:0.85rem; text-align:center; display:flex; align-items:center; gap:10px;">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/8/81/TamilNadu_Logo.svg" style="height:35px;" alt="TN Logo">
+            <div style="text-align:left;">
+                <strong>Official Portal of the Transport Department</strong><br>Government of Tamil Nadu
+            </div>
+        </div>
     </div>
 
     <div class="em-banner" id="em-banner">🚨 EMERGENCY OVERRIDE PROTOCOL ACTIVE — YIELD RIGHT OF WAY 🚨</div>
 
     <nav class="navbar">
         <div class="nav-logo">
-            <div class="icon"></div>
-            Smart Traffic Insights
-            <span class="nav-logo-sub">
-                <select id="loc-select" class="loc-select" onchange="changeLoc()">
-                    <option value="Guduvanchery Terminal">📍 Guduvanchery Terminal</option>
-                    <option value="Tambaram Hub">📍 Tambaram Hub</option>
-                    <option value="Guindy Industrial">📍 Guindy Industrial Focus</option>
-                    <option value="Sholinganallur IT Park">📍 Sholinganallur IT Park</option>
-                </select>
-            </span>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/55/Emblem_of_India.svg" style="height:35px;" alt="India Emblem">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/8/81/TamilNadu_Logo.svg" style="height:35px;" alt="TN Emblem">
+            <div style="display:flex; flex-direction:column; margin-left:5px;">
+                <span style="font-size:1rem; font-weight:800; color:var(--blue);">DEPT OF TRANSPORT, GOVT OF TAMIL NADU</span>
+                <div class="nav-logo-sub" style="display:flex; align-items:center; gap:8px;">
+                    Smart Traffic Analytics
+                    <select id="loc-select" class="loc-select" style="padding:2px 8px; font-size:0.8rem; margin-left:8px;" onchange="changeLoc()">
+                        <option value="Guduvanchery Terminal">📍 Guduvanchery Terminal</option>
+                        <option value="Tambaram Hub">📍 Tambaram Hub</option>
+                        <option value="Guindy Industrial">📍 Guindy Industrial Focus</option>
+                        <option value="Sholinganallur IT Park">📍 Sholinganallur IT Park</option>
+                    </select>
+                </div>
+            </div>
         </div>
         <div class="nav-center">
             <button class="btn active" id="tab-dash" onclick="setTab('dash')">Live Dashboard</button>
@@ -722,10 +701,10 @@
                 <div>
                     <!-- Updated Target Title -->
                     <div style="display:flex; align-items:center; gap:10px; margin-bottom:5px;">
-                        <h1 id="dyn-title" style="font-size:2.2rem; font-weight:800; letter-spacing:0.5px; background:-webkit-linear-gradient(#f0f4f8, #8b9dc3); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">Guduvanchery Terminal</h1>
-                        <div class="badge bg-green" style="font-size:1rem; padding:6px 12px; letter-spacing:1px; border:1px solid var(--green);">LIVE NODE</div>
+                        <h1 id="dyn-title" style="font-size:2.2rem; font-weight:800; letter-spacing:0.5px; color:var(--blue);">Guduvanchery Terminal</h1>
+                        <div class="badge" style="font-size:0.85rem; padding:4px 10px; letter-spacing:1px; background:#e0f2f1; color:#00695c; border:1px solid #00695c;">APPROVED LIVE METRICS</div>
                     </div>
-                    <p class="card-subtitle" style="font-size:1.05rem; margin-bottom:1.5rem;">Chennai Metropolitan Traffic Network • Running Autonomously via YOLOv8 Vision</p>
+                    <p class="card-subtitle" style="font-size:1.05rem; margin-bottom:1.5rem;">Official Motor Vehicles Department Gateway • Autonomous YOLOv8 Analysis</p>
                 </div>
                 <div
                     style="font-family:var(--font-mono); font-size:1.1rem; color:var(--text-muted); padding:10px 20px; background:rgba(0,0,0,0.3); border-radius:10px; border:1px solid var(--border);">
@@ -1362,10 +1341,10 @@
             options: {
                 responsive: true, maintainAspectRatio: false,
                 scales: {
-                    y: { min: 0, max: 150, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#8b9dc3' } },
-                    x: { grid: { display: false }, ticks: { color: '#8b9dc3' } }
+                    y: { min: 0, max: 150, grid: { color: '#e2e8f0' }, ticks: { color: '#475569' } },
+                    x: { grid: { display: false }, ticks: { color: '#475569' } }
                 },
-                plugins: { legend: { labels: { color: '#f0f4f8', usePointStyle: true } } }
+                plugins: { legend: { labels: { color: '#1e293b', usePointStyle: true } } }
             }
         });
 
