@@ -924,12 +924,12 @@
         };
         let activeProfile = LOC_PROFILES['Guduvanchery Terminal'];
 
-        // Use user-provided local MP4 videos
-        const VID_URLS = {
-            A: 'traffic_A.mp4',
-            B: 'traffic_B.mp4',
-            C: 'traffic_C.mp4',
-            D: 'traffic_D.mp4'
+        // Use high-quality top-down one-way road image background for all boundaries
+        const IMG_URLS = {
+            A: 'one_way_road.png',
+            B: 'one_way_road.png',
+            C: 'one_way_road.png',
+            D: 'one_way_road.png'
         };
 
         // Generate Roads UI
@@ -954,7 +954,7 @@
                     </div>
                     
                     <div class="cam-box" id="cbox-${r}">
-                        <video src="${VID_URLS[r]}" class="cam-bg" id="vid-${r}" autoplay loop muted playsinline style="object-fit:cover;"></video>
+                        <img src="${IMG_URLS[r]}" class="cam-bg" id="vid-${r}" style="object-fit:cover; width:100%; height:100%;">
                         <canvas class="cam-canvas" id="canv-${r}"></canvas>
                         <div class="ai-overlay"><div class="blink"></div> AI YOLO TRACKING</div>
                     </div>
