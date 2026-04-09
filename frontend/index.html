@@ -676,7 +676,7 @@
                     <select id="loc-select" class="loc-select" style="padding:2px 8px; font-size:0.8rem; margin-left:8px;" onchange="changeLoc()">
                         <option value="Guduvanchery Terminal">📍 Guduvanchery Terminal</option>
                         <option value="Tambaram Hub">📍 Tambaram Hub</option>
-                        <option value="Guindy Industrial">📍 Guindy Industrial Focus</option>
+                        <option value="Guindy Industrial Focus">📍 Guindy Industrial Focus</option>
                         <option value="Sholinganallur IT Park">📍 Sholinganallur IT Park</option>
                     </select>
                 </div>
@@ -1073,7 +1073,7 @@
             // Average Wait Time calculation hook
             let sumQ = 0;
             Object.values(S.queues).forEach(v => sumQ += v);
-            S.waitTotal = (sumQ > 0) ? (sumQ * 2.5).toFixed(1) : 0;
+            S.waitTotal = (sumQ > 0) ? ((sumQ / 4) * 1.5).toFixed(1) : 0;
 
             requestAnimationFrame(renderAIBoxes);
         }
