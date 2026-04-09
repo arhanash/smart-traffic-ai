@@ -884,12 +884,9 @@
                     </div>
                     <div style="display:flex; flex-direction:column; gap:15px;">
                         <div class="insight-card">
-                            <div style="font-size:0.95rem;font-weight:700;margin-bottom:6px; color:var(--text);">💡
-                                Neural Network Adaptive Timing</div>
-                            <div class="card-subtitle" style="margin-bottom:8px;">Running continuous optimization on
-                                South boundary.</div>
-                            <div class="t-green font-mono" style="font-size:0.85rem;">📈 +12% flow efficiency achieved
-                            </div>
+                            <div style="font-size:0.95rem;font-weight:700;margin-bottom:6px; color:var(--text);">💡 Neural Network Adaptive Timing</div>
+                            <div class="card-subtitle" id="sys-insight-text" style="margin-bottom:8px;">South Boundary optimization active. Route clear.</div>
+                            <div class="t-green font-mono" style="font-size:0.85rem;">📈 +12% flow efficiency achieved</div>
                         </div>
                     </div>
                 </div>
@@ -907,29 +904,37 @@
         const API_URL = (import.meta && import.meta.env && import.meta.env.VITE_API_URL) || 'http://localhost:3000';
 
         let S = {
-            cycles: 0, time: 0,
+            cycles: 0, time: 0, waitTotal: 0,
             activeRoad: 'A', roadNames: ['A', 'B', 'C', 'D'],
-            queues: { A: 0, B: 0, C: 0, D: 0 }, speeds: { A: 40, B: 35, C: 45, D: 30 },
-            vehs: { A: 0, B: 0, C: 0, D: 0 }, total: 4632, emOn: false, emRoad: null, emType: null, emTimer: 0,
+            queues: { A: 0, B: 0, C: 0, D: 0 }, speeds: { A: 0, B: 0, C: 0, D: 0 },
+            vehs: { A: 0, B: 0, C: 0, D: 0 }, totals: {}, 
+            emOn: false, emRoad: null, emType: null, emTimer: 0,
             apiActive: false
         };
 
         const R_LABELS = { A: 'North Bound (A)', B: 'East Bound (B)', C: 'South Bound (C)', D: 'West Bound (D)' };
 
         const LOC_PROFILES = {
-            'Guduvanchery Terminal': { spawnChance: 0.03, speedBase: 1.5, typeBias: ['CAR', 'CAR', 'SUV', 'TRUCK', 'VAN'] },
-            'Tambaram Hub': { spawnChance: 0.08, speedBase: 2.0, typeBias: ['CAR', 'CAR', 'SUV', 'VAN'] },
-            'Guindy Industrial Focus': { spawnChance: 0.04, speedBase: 1.0, typeBias: ['TRUCK', 'TRUCK', 'VAN', 'CAR'] },
-            'Sholinganallur IT Park': { spawnChance: 0.07, speedBase: 2.8, typeBias: ['CAR', 'CAR', 'CAR', 'SUV'] },
+            'Guduvanchery Terminal': { spawnChance: 0.03, speedBase: 1.5, typeBias: ['CAR', 'CAR', 'SUV', 'TRUCK', 'VAN'], insight: 'South Boundary optimization active. Route clear.' },
+            'Tambaram Hub': { spawnChance: 0.08, speedBase: 2.0, typeBias: ['CAR', 'CAR', 'SUV', 'VAN'], insight: 'Heavy Commuter volume detected. Expediting Main line.' },
+            'Guindy Industrial Focus': { spawnChance: 0.04, speedBase: 1.0, typeBias: ['TRUCK', 'TRUCK', 'VAN', 'CAR'], insight: 'Freight Fleet pacing adjusted to -12% velocity curve.' },
+            'Sholinganallur IT Park': { spawnChance: 0.07, speedBase: 2.8, typeBias: ['CAR', 'CAR', 'CAR', 'SUV'], insight: 'IT Corridor peak surge override firmly engaged.' },
         };
-        let activeProfile = LOC_PROFILES['Guduvanchery Terminal'];
+        let activeProfileName = 'Guduvanchery Terminal';
+        let activeProfile = LOC_PROFILES[activeProfileName];
 
-        // Use high-quality top-down one-way road image background for all boundaries
+        // Ensure realistic 24-hr historical daily volume up to current time (resets implicitly via Date cycle at midnight)
+        const elapsedMins = (new Date().getHours() * 60) + new Date().getMinutes(); 
+        Object.keys(LOC_PROFILES).forEach(k => {
+            S.totals[k] = Math.floor(LOC_PROFILES[k].spawnChance * 60 * 4 * elapsedMins * 1.5);
+        });
+
+        // Guaranteed CDN Delivery for background map (fix missing image artifacts)
         const IMG_URLS = {
-            A: 'one_way_road.png',
-            B: 'one_way_road.png',
-            C: 'one_way_road.png',
-            D: 'one_way_road.png'
+            A: 'https://images.unsplash.com/photo-1617454269151-512c1b18360f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+            B: 'https://images.unsplash.com/photo-1617454269151-512c1b18360f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+            C: 'https://images.unsplash.com/photo-1617454269151-512c1b18360f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+            D: 'https://images.unsplash.com/photo-1617454269151-512c1b18360f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80'
         };
 
         // Generate Roads UI
@@ -1084,7 +1089,12 @@
                 engine.boxes = engine.boxes.filter(b => b.y < engine.h + 20 && b.x > -50 && b.x < engine.w + 50);
             });
 
-            S.total += newTotalAdded;
+            S.totals[activeProfileName] += newTotalAdded;
+
+            // Average Wait Time calculation hook
+            let sumQ = 0;
+            Object.values(S.queues).forEach(v => sumQ += v);
+            S.waitTotal = (sumQ > 0) ? (sumQ * 2.5).toFixed(1) : 0;
 
             requestAnimationFrame(renderAIBoxes);
         }
@@ -1092,9 +1102,13 @@
 
         // UI Refresh Loop
         setInterval(() => {
+            const resetMins = (new Date().getHours() * 60) + new Date().getMinutes();
+            if(resetMins === 0) S.totals[activeProfileName] = 0; // Midnight complete flush!
+            
             document.getElementById('clock').innerText = new Date().toLocaleTimeString('en-US', { hour12: false });
-            document.getElementById('st-tot').innerText = S.total;
-            document.getElementById('c-tot').innerText = S.total;
+            document.getElementById('st-tot').innerText = S.totals[activeProfileName];
+            document.getElementById('c-tot').innerText = S.totals[activeProfileName];
+            if(document.getElementById('st-wt')) document.getElementById('st-wt').innerText = S.waitTotal + 's';
 
             S.roadNames.forEach(r => {
                 const isGreen = S.emOn ? (r === S.emRoad) : (r === S.activeRoad);
@@ -1114,10 +1128,10 @@
                 bar.style.background = pct < 30 ? 'var(--green)' : pct < 70 ? 'var(--amber)' : 'var(--red)';
             });
 
-            let aTp = Math.floor(S.total / ((S.cycles + 1) * 8)) * 60;
+            let aTp = Math.floor(S.totals[activeProfileName] / (((resetMins * 60) + 1) / 60)) * 60;
             if (aTp > 0 && aTp < 5000) {
                 document.getElementById('st-tp').innerText = aTp;
-                document.getElementById('c-tp').innerText = aTp;
+                if(document.getElementById('c-tp')) document.getElementById('c-tp').innerText = aTp;
             }
 
         }, 250);
@@ -1154,7 +1168,7 @@
             }
             
             // Impact metrics tick
-            socCO2 += (S.total * 0.0001); socHrs += 0.01;
+            socCO2 += (sumQ * 0.001); socHrs += (S.waitTotal * 0.0001);
             if(document.getElementById('soc-co2')) document.getElementById('soc-co2').innerText = socCO2.toFixed(1);
             if(document.getElementById('soc-hrs')) document.getElementById('soc-hrs').innerText = socHrs.toFixed(1);
         }, 1000);
@@ -1172,8 +1186,14 @@
         window.changeLoc = () => {
             const loc = document.getElementById('loc-select').value;
             document.getElementById('dyn-title').innerText = loc;
-            activeProfile = LOC_PROFILES[loc.trim()];
-            S.roadNames.forEach(r => { canvEngine[r].boxes = []; S.queues[r]=0; S.vehs[r]=0; }); // flush cache
+            activeProfileName = loc.trim();
+            activeProfile = LOC_PROFILES[activeProfileName];
+            
+            if(document.getElementById('sys-insight-text')) document.getElementById('sys-insight-text').innerText = activeProfile.insight;
+            
+            S.roadNames.forEach(r => { canvEngine[r].boxes = []; S.queues[r]=0; S.vehs[r]=0; S.speeds[r]=0; }); // flush cache completely
+            if (typeof rebuildChart !== 'undefined') rebuildChart(activeProfileName);
+            
             document.getElementById('st-tot').style.color = 'var(--blue)'; setTimeout(()=>document.getElementById('st-tot').style.color='', 500);
         }
 
@@ -1247,7 +1267,7 @@
                 // Auto fallback if backend goes to sleep
                 if (!rawData || !rawData.length) {
                     rawData = S.roadNames.map((r, i) => ({
-                        id: S.total - i, road: r, signal_state: (S.emOn ? (r === S.emRoad) : (r === S.activeRoad)) ? 'G' : 'R',
+                        id: S.totals[activeProfileName] - i, road: r, signal_state: (S.emOn ? (r === S.emRoad) : (r === S.activeRoad)) ? 'G' : 'R',
                         vehicles: S.vehs[r] || 0, queue: S.queues[r] || 0, speed: S.speeds[r] || 0, throughput: Math.floor((S.vehs[r] || 0) * 60),
                         created_at: new Date().toISOString()
                     }));
@@ -1322,7 +1342,7 @@
                         speed: parseFloat(S.speeds[r]), throughput: Math.floor(S.vehs[r] * 60),
                         signal_state: (S.emOn ? (r === S.emRoad) : (r === S.activeRoad)) ? 'G' : 'R'
                     })),
-                    snapshot: { active_road: S.activeRoad, total: S.total, wait: S.wait, tput: S.tput, eff: S.eff }
+                    snapshot: { active_road: S.activeRoad, total: S.totals[activeProfileName], wait: S.waitTotal, tput: S.totals[activeProfileName] }
                 });
             }
         }, 5000);
@@ -1337,17 +1357,27 @@
                     { label: 'East(B)', data: [20, 30, 50, 60, 35, 20], borderColor: '#ffd700', tension: 0.4, borderWidth: 3 },
                     { label: 'South(C)', data: [10, 25, 30, 45, 20, 10], borderColor: '#ff3366', tension: 0.4, borderWidth: 3 },
                     { label: 'West(D)', data: [25, 40, 35, 25, 50, 30], borderColor: '#b026ff', tension: 0.4, borderWidth: 3 }
-                ]
+                ],
             },
             options: {
                 responsive: true, maintainAspectRatio: false,
                 scales: {
-                    y: { min: 0, max: 80, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#8b9dc3' } },
+                    y: { min: 0, max: 150, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#8b9dc3' } },
                     x: { grid: { display: false }, ticks: { color: '#8b9dc3' } }
                 },
                 plugins: { legend: { labels: { color: '#f0f4f8', usePointStyle: true } } }
             }
         });
+
+        window.rebuildChart = (locName) => {
+            const multi = LOC_PROFILES[locName].spawnChance * 1000; 
+            cinst.data.datasets[0].data = [15+multi, 45+multi, 65+multi, 40+multi, 30+multi, 15+multi];
+            cinst.data.datasets[1].data = [20+multi, 30+multi, 50+multi, 60+multi, 35+multi, 20+multi];
+            cinst.data.datasets[2].data = [10+multi, 25+multi, 30+multi, 45+multi, 20+multi, 10+multi];
+            cinst.data.datasets[3].data = [25+multi, 40+multi, 35+multi, 25+multi, 50+multi, 30+multi];
+            cinst.update();
+        };
+        rebuildChart(activeProfileName);
 
         setInterval(() => {
             if (cinst) {
