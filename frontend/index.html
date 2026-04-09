@@ -916,6 +916,14 @@
 
         const R_LABELS = { A: 'North Bound (A)', B: 'East Bound (B)', C: 'South Bound (C)', D: 'West Bound (D)' };
 
+        const LOC_PROFILES = {
+            'Guduvanchery Terminal': { spawnChance: 0.03, speedBase: 1.5, typeBias: ['CAR', 'CAR', 'SUV', 'TRUCK', 'VAN'] },
+            'Tambaram Hub': { spawnChance: 0.08, speedBase: 2.0, typeBias: ['CAR', 'CAR', 'SUV', 'VAN'] },
+            'Guindy Industrial Focus': { spawnChance: 0.04, speedBase: 1.0, typeBias: ['TRUCK', 'TRUCK', 'VAN', 'CAR'] },
+            'Sholinganallur IT Park': { spawnChance: 0.07, speedBase: 2.8, typeBias: ['CAR', 'CAR', 'CAR', 'SUV'] },
+        };
+        let activeProfile = LOC_PROFILES['Guduvanchery Terminal'];
+
         // Use user-provided local MP4 videos
         const VID_URLS = {
             A: 'traffic_A.mp4',
@@ -990,13 +998,13 @@
         function spawnAIBox(r) {
             const engine = canvEngine[r];
             engine.boxes.push({
-                x: (engine.w / 2) - 20 + (Math.random() * 40), // Horizon center
-                y: engine.h * 0.35 + (Math.random() * 10), // Horizon height
+                x: (engine.w / 2) - 20 + (Math.random() * 40),
+                y: engine.h * 0.35 + (Math.random() * 10),
                 w: 12, h: 8,
-                driftX: (Math.random() - 0.5) * 3, // Angle driving outwards
-                driftY: 0.6 + Math.random() * 1.5, // Driving towards camera
-                scale: 1,
-                type: VEH_CLASSES[Math.floor(Math.random() * VEH_CLASSES.length)],
+                driftX: (Math.random() - 0.5) * 3,
+                driftY: activeProfile.speedBase * (0.6 + Math.random() * 1.5),
+                scale: 1, speedMult: 1, brakeColor: '#00fa9a',
+                type: activeProfile.typeBias[Math.floor(Math.random() * activeProfile.typeBias.length)],
                 conf: (85 + Math.random() * 14).toFixed(1)
             });
         }
@@ -1006,53 +1014,60 @@
             if (!lastFrame) lastFrame = time;
             const delta = (time - lastFrame) / 16.66;
             lastFrame = time;
-
+            
             let newTotalAdded = 0;
 
             S.roadNames.forEach(r => {
                 const engine = canvEngine[r];
                 engine.ctx.clearRect(0, 0, engine.w, engine.h);
-
+                
                 const isGreen = S.emOn ? (r === S.emRoad) : (r === S.activeRoad);
 
-                // Video Auto-Pause/Play Sync
-                const vidEle = document.getElementById(`vid-${r}`);
-                if (vidEle) {
-                    if (!isGreen && !vidEle.paused) vidEle.pause();
-                    if (isGreen && vidEle.paused) vidEle.play();
-                }
-
-                // Spawn dense realist traffic when green
-                if (isGreen && Math.random() < 0.04) {
+                // Constant Authentic Traffic Flow
+                if (Math.random() < activeProfile.spawnChance) {
                     spawnAIBox(r);
                     newTotalAdded++;
                 }
 
                 let stoppedCount = 0;
                 let activeCount = engine.boxes.length;
+                let totalSpd = 0;
+
+                // Sort visually distant objects first (Z-index layering) and kinematic proximity evaluation
+                engine.boxes.sort((a,b) => a.y - b.y);
 
                 engine.boxes.forEach((b, i) => {
-                    if (!isGreen) {
-                        // Signal is RED - Complete Mathematical Freeze
-                        stoppedCount++;
-                        b.color = '#ff3366';
+                    let frontCar = i < engine.boxes.length - 1 ? engine.boxes[i+1] : null;
+                    let distToFront = frontCar ? (frontCar.y - b.y) : 999;
+                    let atStopLine = b.y > (engine.h - 50);
+
+                    // Authentic Kinematics Braking Rules
+                    if ((!isGreen && atStopLine) || distToFront < 30) {
+                        b.speedMult *= 0.85; // Hard brake deceleration curve
+                        b.brakeColor = '#ff3366';
+                        b.driftX *= 0.90; // stop drifting laterally
+                        if (b.speedMult < 0.1) stoppedCount++;
                     } else {
-                        // Signal is GREEN - Process Perspective Matrix Movement
-                        b.scale += 0.01 * delta;
-                        b.x += b.driftX * b.scale * delta;
-                        b.y += b.driftY * b.scale * delta;
-                        b.w += 0.4 * delta;
-                        b.h += 0.25 * delta;
-                        b.color = '#00fa9a';
+                        // Accelerate and proceed
+                        b.speedMult = Math.min(1, b.speedMult + 0.05);
+                        b.brakeColor = '#00fa9a';
                     }
 
+                    b.scale += 0.01 * delta * b.speedMult;
+                    b.x += b.driftX * b.scale * delta * b.speedMult;
+                    b.y += b.driftY * b.scale * delta * b.speedMult;
+                    b.w += 0.4 * delta * b.speedMult;
+                    b.h += 0.25 * delta * b.speedMult;
+
+                    totalSpd += (b.driftY * b.speedMult * 25);
+
                     // Draw bounding box
-                    engine.ctx.strokeStyle = b.color;
+                    engine.ctx.strokeStyle = b.brakeColor;
                     engine.ctx.lineWidth = 1.5;
                     engine.ctx.strokeRect(b.x, b.y, b.w, b.h);
 
                     // Draw Label bg
-                    engine.ctx.fillStyle = b.color;
+                    engine.ctx.fillStyle = b.brakeColor;
                     engine.ctx.fillRect(b.x, b.y - 12, b.w, 12);
 
                     // Draw Label text
@@ -1061,9 +1076,9 @@
                     engine.ctx.fillText(`[${b.type}]`, b.x + 1, b.y - 3, b.w - 2);
                 });
 
-                // EXACT COUNT COUPLED TO PHYSICS:
                 S.vehs[r] = activeCount;
                 S.queues[r] = stoppedCount;
+                S.speeds[r] = activeCount > 0 ? (totalSpd / activeCount).toFixed(1) : 0;
 
                 // Cleanup Offscreen (Bottom of frame)
                 engine.boxes = engine.boxes.filter(b => b.y < engine.h + 20 && b.x > -50 && b.x < engine.w + 50);
@@ -1087,7 +1102,7 @@
                 document.getElementById(`v-${r}`).innerText = S.vehs[r];
                 document.getElementById(`q-${r}`).innerText = S.queues[r];
 
-                S.speeds[r] = isGreen ? (35 + Math.random() * 15).toFixed(1) : (S.queues[r] > 0 ? (0 + Math.random() * 2).toFixed(1) : (15 + Math.random() * 10).toFixed(1));
+                S.speeds[r] = parseFloat(S.speeds[r]).toFixed(1);
                 document.getElementById(`s-${r}`).innerText = S.speeds[r];
 
                 document.getElementById(`tp-${r}`).innerText = (S.vehs[r] * 12).toFixed(0);
@@ -1157,6 +1172,8 @@
         window.changeLoc = () => {
             const loc = document.getElementById('loc-select').value;
             document.getElementById('dyn-title').innerText = loc;
+            activeProfile = LOC_PROFILES[loc.trim()];
+            S.roadNames.forEach(r => { canvEngine[r].boxes = []; S.queues[r]=0; S.vehs[r]=0; }); // flush cache
             document.getElementById('st-tot').style.color = 'var(--blue)'; setTimeout(()=>document.getElementById('st-tot').style.color='', 500);
         }
 
