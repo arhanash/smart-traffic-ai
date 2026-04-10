@@ -916,12 +916,12 @@
             S.totals[k] = Math.floor(LOC_PROFILES[k].spawnChance * 60 * 4 * elapsedMins * 1.5);
         });
 
-        // Guaranteed CDN Delivery for background map (fix missing image artifacts)
+        // Local Static Delivery for background map (Fixes CDN hotlinking blocks)
         const IMG_URLS = {
-            A: 'https://images.unsplash.com/photo-1617454269151-512c1b18360f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-            B: 'https://images.unsplash.com/photo-1617454269151-512c1b18360f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-            C: 'https://images.unsplash.com/photo-1617454269151-512c1b18360f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-            D: 'https://images.unsplash.com/photo-1617454269151-512c1b18360f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80'
+            A: 'one_way_road.png',
+            B: 'one_way_road.png',
+            C: 'one_way_road.png',
+            D: 'one_way_road.png'
         };
 
         // Generate Roads UI
