@@ -50,4 +50,11 @@ Every 5 seconds, absolute data logs (Queue States, Total Passed, Speeds) alongsi
 4. *(Optional)* For cloud database logging, boot the backend `server.js` using `node server.js` and point `VITE_API_URL` locally.
 
 ---
+
+## ⚖️ License
+
+**All Rights Reserved.**  
+This project is proprietary. Unauthorized copying, distribution, or modification of this codebase is strictly prohibited without explicit permission from **Arhan Ashraf**.
+
+---
 *Created dynamically for Academic & Official Deployment Simulation.*
