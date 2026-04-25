@@ -4,6 +4,10 @@
 
 A revolutionary fullstack autonomous traffic flow simulation and analytics engine. This platform replaces archaic, strict-timer traffic light logic with dynamic, queue-threshold AI evaluations—mitigating massive urban congestion, reducing carbon emissions, and expediting critical emergency vehicles.
 
+### 🌐 Live Portal Access
+- 🔗 **Live demo:** [https://smart-traffic-ai-eight.vercel.app/](https://smart-traffic-ai-eight.vercel.app/)
+- 🔐 **Access:** `admin123`
+
 ---
 
 ## 👤 Developed By
