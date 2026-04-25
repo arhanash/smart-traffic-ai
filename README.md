@@ -10,10 +10,6 @@ A revolutionary fullstack autonomous traffic flow simulation and analytics engin
 
 | Name | Register Number |
 | :--- | :--- |
-| **Allan Roy** | RA2411030010028 |
-| **Peter Jijo Manavalan** | RA2411030010045 |
-| **Arjun Anil** | RA2411030010020 |
-| **Elijah Ajith** | RA2411030010001 |
 | **Arhan Ashraf** | RA2411030010039 |
 
 ---
