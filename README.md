@@ -6,11 +6,9 @@ A revolutionary fullstack autonomous traffic flow simulation and analytics engin
 
 ---
 
-## 👥 Project Team Members
+## 👤 Developed By
 
-| Name | Register Number |
-| :--- | :--- |
-| **Arhan Ashraf** | RA2411030010039 |
+**Arhan Ashraf**
 
 ---
 
